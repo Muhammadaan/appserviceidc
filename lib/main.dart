@@ -1,7 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:tokokita/utils/router.dart';
+import 'package:tokokita/utils/style.dart';
 
-void main() {
+import 'service/app_service.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  AppService.configure(
+      apiBaseURL: 'https://olla.idcore.id/apics', appTitle: 'olla');
+
+  await AppService().init();
+
   runApp(MyApp());
 }
 
@@ -12,9 +21,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'App',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
-        fontFamily: 'Poppins-Regular',
-      ),
+          primarySwatch: Colors.blue,
+          fontFamily: 'Poppins-Regular',
+          appBarTheme: AppBarTheme(backgroundColor: mainColor)),
       onGenerateRoute: AppRoute.generateRoute,
       initialRoute: '/',
     );
