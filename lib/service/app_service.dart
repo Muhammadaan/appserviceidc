@@ -33,7 +33,7 @@ class AppService {
         responseType: ResponseType.json));
 
     dio.options.headers = {
-      'Authorization': 'Bearer ${prefs.get('token')}',
+      'Authorization': 'Bearer ${prefs.getString('token')}',
       'Content-Type': 'application/json',
       'Accept': 'application/json'
     };
