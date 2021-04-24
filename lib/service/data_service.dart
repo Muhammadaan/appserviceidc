@@ -1,5 +1,7 @@
 import 'package:dio/dio.dart';
+import 'package:tokokita/models/domisili_response.dart';
 import 'package:tokokita/models/list_package_response.dart';
+import 'package:tokokita/models/payment_response.dart';
 
 import 'package:tokokita/models/service_response.dart';
 
@@ -31,6 +33,38 @@ class DataService {
         '/package-list/$id',
       );
       return PackageListResponse.fromJson(response.data);
+    } on DioError catch (e) {
+      if (e.response.statusCode == 404) {
+        print(e.response.statusCode);
+      } else {
+        print(e.message);
+        print(e.request);
+      }
+    }
+  }
+
+  static Future getListDomisili() async {
+    try {
+      response = await _dio.get(
+        '/domisili',
+      );
+      return DomisliResponse.fromJson(response.data);
+    } on DioError catch (e) {
+      if (e.response.statusCode == 404) {
+        print(e.response.statusCode);
+      } else {
+        print(e.message);
+        print(e.request);
+      }
+    }
+  }
+
+  static Future getListPayment() async {
+    try {
+      response = await _dio.get(
+        '/method-payment',
+      );
+      return PayementResponse.fromJson(response.data);
     } on DioError catch (e) {
       if (e.response.statusCode == 404) {
         print(e.response.statusCode);

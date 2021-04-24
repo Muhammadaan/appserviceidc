@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tokokita/screens/order_screen/order_screen.dart';
 import 'package:tokokita/utils/global_method_helper.dart';
 import 'package:tokokita/utils/style.dart';
 import './list_package_screen_view_model.dart';
@@ -91,6 +92,8 @@ class ListPackageScreenView extends ListPackageScreenViewModel {
                                   Container(
                                     width: 100,
                                     child: TextField(
+                                      controller: ctrlListQuantity[
+                                          packageListResponse.data.indexOf(e)],
                                       keyboardType: TextInputType.number,
                                       decoration: InputDecoration(
                                         contentPadding: EdgeInsets.all(10.0),
@@ -111,6 +114,9 @@ class ListPackageScreenView extends ListPackageScreenViewModel {
                                   Expanded(
                                     child: Container(
                                       child: TextField(
+                                        controller: ctrlListComment[
+                                            packageListResponse.data
+                                                .indexOf(e)],
                                         maxLines: 3,
                                         decoration: InputDecoration(
                                           contentPadding: EdgeInsets.all(10.0),
@@ -127,7 +133,30 @@ class ListPackageScreenView extends ListPackageScreenViewModel {
                           ),
                         ),
                       );
-                    }).toList())
+                    }).toList()),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Container(
+                      padding: EdgeInsets.all(20),
+                      child: TextButton(
+                        onPressed: () {
+                          toNextPage();
+                          // Navigator.push(
+                          //   context,
+                          //   MaterialPageRoute(
+                          //     builder: (context) => OrderScreen(),
+                          //   ),
+                          // );
+                        },
+                        child: Text("Next"),
+                        style: TextButton.styleFrom(
+                            primary: Colors.white,
+                            backgroundColor: mainColor,
+                            onSurface: Colors.grey,
+                            minimumSize: Size(double.infinity, 50)),
+                      ),
+                    ),
                   ],
                 ),
               ),

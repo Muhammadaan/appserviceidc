@@ -8,6 +8,12 @@ abstract class ListPackageScreenViewModel extends State<ListPackageScreen> {
 
   bool isLoad = true;
   PackageListResponse packageListResponse;
+  List<TextEditingController> ctrlListQuantity;
+  List<TextEditingController> ctrlListComment;
+  List<dynamic> listPackage = [];
+  List<dynamic> listQty = [];
+  List<dynamic> listComent = [];
+
   @override
   void initState() {
     // TODO: implement initState
@@ -18,8 +24,28 @@ abstract class ListPackageScreenViewModel extends State<ListPackageScreen> {
   getData() async {
     packageListResponse = await DataService.getListPackage(id: 1);
 
+    ctrlListQuantity = List.generate(
+        packageListResponse.data.length, (i) => TextEditingController());
+    ctrlListComment = List.generate(
+        packageListResponse.data.length, (i) => TextEditingController());
+
     setState(() {
       isLoad = false;
     });
+  }
+
+  toNextPage() {
+    ctrlListQuantity.map((e) {
+      listQty.add({
+        "quantity": e.text,
+      });
+    }).toList();
+    ctrlListComment.map((e) {
+      listComent.add({"comment": e.text});
+    }).toList();
+
+    var newList = List.from(listQty)..addAll(listComent);
+
+    print(newList);
   }
 }
