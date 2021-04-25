@@ -1,13 +1,22 @@
+import 'dart:convert';
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:tokokita/models/create_order_request.dart';
+import 'package:tokokita/models/create_order_request.dart' as CO;
+import 'package:tokokita/models/create_order_response.dart';
 import 'package:tokokita/models/domisili_response.dart';
 import 'package:tokokita/models/payment_response.dart';
+import 'package:tokokita/screens/waiting_screen/waiting_screen.dart';
 import 'package:tokokita/service/data_service.dart';
+import 'package:tokokita/utils/app_helper.dart';
 import './order_screen.dart';
 
 abstract class OrderScreenViewModel extends State<OrderScreen> {
   // Add your state and logic here
 
   bool isLoad = true;
+  bool isLoadPost = false;
   int domisiliId;
   String domisiliName;
   int paymentId;
@@ -18,16 +27,14 @@ abstract class OrderScreenViewModel extends State<OrderScreen> {
   TextEditingController longtitudeCtrl = TextEditingController();
   List<dynamic> listDomisili = [];
   List<dynamic> listPayment = [];
-  // List<dynamic> listDomisili = [
-  //   {"id": 1, "nama": "domisili1"},
-  //   {"id": 2, "nama": "domisili2"},
-  // ];
-  // List<dynamic> listPayment = [
-  //   {"id": 1, "nama": "payment 1"},
-  //   {"id": 2, "nama": "payment 2"},
-  // ];
+  List<dynamic> listpackegeData = [
+    {"id": 1, "quantity": 20, "comment": "Rusak"},
+    {"id": 2, "quantity": 20, "comment": "Baik"}
+  ];
+
   DomisliResponse domisliResponse;
   PayementResponse payementResponse;
+  CreateOrderResponse createOrderResponse;
 
   @override
   void initState() {
@@ -51,5 +58,56 @@ abstract class OrderScreenViewModel extends State<OrderScreen> {
     setState(() {
       isLoad = false;
     });
+  }
+
+  order() async {
+    if (!AppHelper.isNullOrEmptyString(addressCtrl.text) ||
+        !AppHelper.isNullOrEmptyString(addressNoteCtrl.text) ||
+        !AppHelper.isNullOrEmptyString(latitudeCtrl.text) ||
+        !AppHelper.isNullOrEmptyString(longtitudeCtrl.text)) {
+      setState(() {
+        isLoadPost = true;
+      });
+      var nowDate = DateTime.now();
+      List<CO.ArrayPackage> listPackage = List<CO.ArrayPackage>();
+
+      listpackegeData
+          .map((e) => listPackage.add(CO.ArrayPackage(
+              id: e['id'], quantity: e['quantity'], comment: e['comment'])))
+          .toList();
+      CreateOrderRequest req = CreateOrderRequest(
+          dateTimeOrdered: nowDate.toString(),
+          address: addressCtrl.text,
+          addressNote: addressNoteCtrl.text,
+          latitude: latitudeCtrl.text,
+          longitude: longtitudeCtrl.text,
+          methodPaymentId: paymentId,
+          domisiliId: domisiliId,
+          arrayPackage: listPackage);
+
+      log(jsonEncode(req));
+      createOrderResponse = await DataService.createdOrder(dataorder: req);
+
+      setState(() {
+        isLoadPost = false;
+      });
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => WaitingScreen(
+            id: createOrderResponse.order.first.id,
+            waiting: createOrderResponse.pageWaitingPayment,
+          ),
+        ),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          duration: Duration(seconds: 3),
+          content: const Text('All inputs are required!!!'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
   }
 }

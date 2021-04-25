@@ -32,4 +32,14 @@ abstract class DashboardScreenViewModel extends State<DashboardScreen> {
       isLoad = false;
     });
   }
+
+  logOut() async {
+    prefs = await SharedPreferences.getInstance();
+    prefs.remove('is_login');
+    prefs.remove('token');
+    prefs.remove('nama');
+    prefs.remove('hp');
+    prefs.remove('email');
+    Navigator.pushReplacementNamed(context, '/login');
+  }
 }

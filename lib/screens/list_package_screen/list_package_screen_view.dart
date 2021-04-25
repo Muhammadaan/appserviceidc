@@ -114,9 +114,6 @@ class ListPackageScreenView extends ListPackageScreenViewModel {
                                   Expanded(
                                     child: Container(
                                       child: TextField(
-                                        controller: ctrlListComment[
-                                            packageListResponse.data
-                                                .indexOf(e)],
                                         maxLines: 3,
                                         decoration: InputDecoration(
                                           contentPadding: EdgeInsets.all(10.0),
@@ -142,12 +139,6 @@ class ListPackageScreenView extends ListPackageScreenViewModel {
                       child: TextButton(
                         onPressed: () {
                           toNextPage();
-                          // Navigator.push(
-                          //   context,
-                          //   MaterialPageRoute(
-                          //     builder: (context) => OrderScreen(),
-                          //   ),
-                          // );
                         },
                         child: Text("Next"),
                         style: TextButton.styleFrom(

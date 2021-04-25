@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tokokita/models/list_package_response.dart';
+import 'package:tokokita/screens/order_screen/order_screen.dart';
 import 'package:tokokita/service/data_service.dart';
 import './list_package_screen.dart';
 
@@ -26,8 +27,6 @@ abstract class ListPackageScreenViewModel extends State<ListPackageScreen> {
 
     ctrlListQuantity = List.generate(
         packageListResponse.data.length, (i) => TextEditingController());
-    ctrlListComment = List.generate(
-        packageListResponse.data.length, (i) => TextEditingController());
 
     setState(() {
       isLoad = false;
@@ -36,16 +35,14 @@ abstract class ListPackageScreenViewModel extends State<ListPackageScreen> {
 
   toNextPage() {
     ctrlListQuantity.map((e) {
-      listQty.add({
-        "quantity": e.text,
-      });
-    }).toList();
-    ctrlListComment.map((e) {
-      listComent.add({"comment": e.text});
+      listQty.add({"id": e.value, "quantity": e.text, "comment": "Rusak"});
     }).toList();
 
-    var newList = List.from(listQty)..addAll(listComent);
-
-    print(newList);
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => OrderScreen(),
+      ),
+    );
   }
 }

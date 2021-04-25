@@ -34,15 +34,25 @@ class DashboardScreenView extends DashboardScreenViewModel {
                           borderRadius: BorderRadius.only(
                               bottomRight: Radius.circular(20),
                               bottomLeft: Radius.circular(20))),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                      child: Row(
                         children: [
-                          Text(
-                            "Halo $nama ",
-                            style: TextStyle(
-                                fontSize: 24, fontWeight: FontWeight.bold),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Halo $nama ",
+                                style: TextStyle(
+                                    fontSize: 24, fontWeight: FontWeight.bold),
+                              ),
+                              Text("$email  $hp")
+                            ],
                           ),
-                          Text("$email  $hp")
+                          Spacer(),
+                          IconButton(
+                              icon: Icon(Icons.logout),
+                              onPressed: () {
+                                logOut();
+                              })
                         ],
                       ),
                     ),

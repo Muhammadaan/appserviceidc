@@ -1,4 +1,6 @@
 import 'package:dio/dio.dart';
+import 'package:tokokita/models/create_order_request.dart';
+import 'package:tokokita/models/create_order_response.dart';
 import 'package:tokokita/models/domisili_response.dart';
 import 'package:tokokita/models/list_package_response.dart';
 import 'package:tokokita/models/payment_response.dart';
@@ -65,6 +67,20 @@ class DataService {
         '/method-payment',
       );
       return PayementResponse.fromJson(response.data);
+    } on DioError catch (e) {
+      if (e.response.statusCode == 404) {
+        print(e.response.statusCode);
+      } else {
+        print(e.message);
+        print(e.request);
+      }
+    }
+  }
+
+  static Future createdOrder({CreateOrderRequest dataorder}) async {
+    try {
+      response = await _dio.post('/create-order', data: dataorder);
+      return CreateOrderResponse.fromJson(response.data);
     } on DioError catch (e) {
       if (e.response.statusCode == 404) {
         print(e.response.statusCode);
